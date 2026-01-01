@@ -1,7 +1,6 @@
 package adbgo
 
 import (
-	"fmt"
 	"os/exec"
 )
 
@@ -17,30 +16,45 @@ func NewADBBridge(addr string) *ADBBridge {
 
 func (a *ADBBridge) Connect() error {
 	cmd := exec.Command("adb", "connect", a.RemoteAddr)
-	output, err := cmd.CombinedOutput()
+	_, err := cmd.CombinedOutput()
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(output))
 	return nil
 }
 
 func (a *ADBBridge) SetPrivateDNS(dns string) error {
 	cmd := exec.Command("adb", "shell", "settings", "put", "global", "private_dns_specifier", dns)
-	output, err := cmd.CombinedOutput()
+	_, err := cmd.CombinedOutput()
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(output))
 	return nil
 }
 
 func (a *ADBBridge) TurnOffPrivateDNS() error {
 	cmd := exec.Command("adb", "shell", "settings", "put", "global", "private_dns_mode", "off")
-	output, err := cmd.CombinedOutput()
+	_, err := cmd.CombinedOutput()
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(output))
+	return nil
+}
+
+func (a *ADBBridge) SendText(text string) error {
+	cmd := exec.Command("adb", "shell", "input keyboard text '"+text+"'")
+	_, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *ADBBridge) DeleteChar() error {
+	cmd := exec.Command("adb", "shell", "input keyevent 67")
+	_, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
 	return nil
 }
