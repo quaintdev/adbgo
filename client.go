@@ -24,8 +24,13 @@ func (a *ADBBridge) Connect() error {
 }
 
 func (a *ADBBridge) SetPrivateDNS(dns string) error {
-	cmd := exec.Command("adb", "shell", "settings", "put", "global", "private_dns_specifier", dns)
+	cmd := exec.Command("adb", "shell", "settings", "put", "global", "private_dns_mode", "hostname")
 	_, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
+	cmd = exec.Command("adb", "shell", "settings", "put", "global", "private_dns_specifier", dns)
+	_, err = cmd.CombinedOutput()
 	if err != nil {
 		return err
 	}
