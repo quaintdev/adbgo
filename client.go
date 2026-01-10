@@ -23,6 +23,15 @@ func (a *ADBBridge) Connect() error {
 	return nil
 }
 
+func (a *ADBBridge) Disconnect() error {
+	cmd := exec.Command("adb", "disconnect")
+	_, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (a *ADBBridge) SetPrivateDNS(dns string) error {
 	cmd := exec.Command("adb", "shell", "settings", "put", "global", "private_dns_mode", "hostname")
 	_, err := cmd.CombinedOutput()
